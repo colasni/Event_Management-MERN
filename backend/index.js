@@ -1,7 +1,11 @@
-import express from 'express';
+import { PORT } from "./src/config/envConfig.js";
+import app from "./app.js";
+import connectDB from "./src/config/database.js";
 
-const app = express();
+connectDB();
 
-app.listen(3000, () =>{
-    console.log('Server is running on port 3000');
-})
+const PUERTO = process.env.PORT;
+
+app.listen(PORT, () => {
+    console.log(`Servidor en ejecución en el puerto ${PUERTO}`);
+});
