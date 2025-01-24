@@ -7,7 +7,7 @@ export const verificar = Router();
 verificar.use((req, res, next) => {
     let token = req.headers['x-access-token']|| req.headers['authorization'];
     if(!token){
-        return res.status(401).json({status: false, errors: 'no autorizado'});
+        return res.status(401).json({status: false, errors: ['no autorizado']});
     }
     if(token.startsWith('Bearer')){
         token = token.slice(7, token.length);

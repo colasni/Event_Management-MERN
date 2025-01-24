@@ -3,7 +3,7 @@ import bcryptjs from 'bcryptjs';
 import mongoose from 'mongoose';
 import {JWT_SECRET, JWT_EXPIRES} from '../config/envConfig.js';
 
-//modelo de usurio 
+//modelo de usuario 
 const esquema = new mongoose.Schema({
     nombre:String, 
     correo:String, 
