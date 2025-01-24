@@ -22,3 +22,21 @@ export const crearEvento = async(req, res)=>{
         return res.status(500).json({status: false, message: [error.message]}); 
     }
 };
+
+export const listarEventos = async(req, res)=>{
+    try{
+        const eventos = await EventoModel.find(); //busca todos los eventos
+        return res.status(200).json({status: true, eventos}); 
+    }catch(error){
+        return res.status(500).json({status: false, message: [error.message]}); 
+    }
+};
+
+export const eliminarEvento = async(req, res)=>{
+    try{
+        await EventoModel.findByIdAndDelete(req.params.id); //busca y elimina un evento por su id
+        res.status(200).json({status: true, massage: 'Evento eliminado con éxito'});
+    }catch(error){
+        res.status(500).json({status: false, message: [error.message]});
+    }
+};
