@@ -40,3 +40,21 @@ export const eliminarEvento = async(req, res)=>{
         res.status(500).json({status: false, message: [error.message]});
     }
 };
+
+export const actualizarEvento = async (req, res) => {
+    try {
+        const eventoActualizado = await EventoModel.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+        if (!eventoActualizado) {
+            return res.status(404).json({ message: "Task not found" });
+        }
+        res.status(200).json({
+            eventoActualizado
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+        }
+};
