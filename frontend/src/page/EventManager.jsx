@@ -3,18 +3,36 @@ import { Table, Button, Form, Card, Row, Col } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const DataTable = () => {
     const [data, setData] = useState([]);
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const navigate = useNavigate();
 
     // Fetch data from the API
     useEffect(() => {
-        axios.get('http://localhost:5000/api/eventos/listar')
-        .then(response => setData(response.data))
-        .catch(error => console.error('Error fetching data:', error));
+        const fetchEvents = async () => {
+            const token = localStorage.getItem('token'); // Obtener el token
+        
+            try {
+                const response = await axios.get('http://localhost:5000/api/eventos/listar', {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Enviar el token en los headers
+                    'Cache-Control': 'no-cache', // Deshabilitar la caché
+                },
+                });
+                console.log('Response JSON:', response.data.eventos); // Aquí puedes inspeccionar el JSON
+                setData(response.data.eventos);
+            } catch (err) {
+                console.error('Error al cargar eventos:', err);
+            }
+        };
+    
+        fetchEvents();
     }, []);
 
+    
     // Handle DELETE request
     const handleDelete = (id) => {
         axios.delete(`https://api.example.com/data/${id}`)
@@ -31,10 +49,36 @@ const DataTable = () => {
         .catch(error => console.error('Error updating data:', error));
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('token'); // Eliminar el token de localStorage
+        navigate('/');
+    };
+    
+
     return (
         <Card className="p-3 m-3 shadow" style={{ backgroundColor: '#1c1c1c', color: 'white', borderRadius: '10px' }}>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+            <h5 className="mb-0">Gestión de Eventos</h5>
+            <div>
+                <Button
+                    variant="success"
+                    size="sm"
+                    className="me-2"
+                    onClick={() => console.log("Agregar nueva actividad")}
+                >
+                    +
+                </Button>
+                <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={handleLogout}
+                >
+                    Cerrar sesión
+                </Button>
+            </div>
+        </div>
         <Row className="mb-3">
-            <Col md={6} className="d-flex flex-column">
+            <Col md={2} className="d-flex flex-column">
             <Form.Group controlId="dateFilter" className="mb-3">
                 <Form.Label className="mb-1">Fecha</Form.Label>
                 <div>
@@ -47,7 +91,7 @@ const DataTable = () => {
                 </div>
             </Form.Group>
             </Col>
-            <Col md={6} className="d-flex flex-column">
+            <Col md={4} className="d-flex flex-column">
             <Form.Group controlId="locationFilter" className="mb-3">
                 <Form.Label className="mb-1">Lugar</Form.Label>
                 <Form.Select>
@@ -72,7 +116,7 @@ const DataTable = () => {
             </thead>
             <tbody>
             {data.map((item) => (
-                <tr key={item.id}>
+                <tr key={item._id}>
                 <td>{item.nombre}</td>
                 <td>{item.fecha}</td>
                 <td>{item.hora}</td>

@@ -4,6 +4,7 @@ import Login from './page/Login'
 import Signup from './page/Signup'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import EventManager from './page/EventManager'
+import ProtectedRoute from './ProtectedRoute';
 
 const App = () => {
   return (
@@ -12,7 +13,10 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Login/>}></Route>
         <Route path="/signup" element={<Signup/>}></Route>
-        <Route path="/eventManager" element={<EventManager/>}></Route>
+            {/* Rutas protegidas */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/eventManager" element={<EventManager />} />
+        </Route>
       </Routes>
     </BrowserRouter>
     </>
