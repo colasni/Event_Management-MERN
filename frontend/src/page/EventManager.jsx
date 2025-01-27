@@ -5,16 +5,19 @@ import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ModalAddEvent from '../components/ModalAddEvent';
+import ModalEditEvent from '../components/ModalEditEvent';
 
 const DataTable = () => {
     const [data, setData] = useState([]);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const navigate = useNavigate();
+    const [selectedEventId, setSelectedEventId] = useState(null); // Nuevo estado para el ID seleccionado
 
     // Modal state
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const [showAdd, setShowAdd] = useState(false);
+    const [showEdit, setShowEdit] = useState(false);
+    const handleCloseAdd = () => setShowAdd(false);
+    const handleCloseEdit = () => setShowEdit(false);
 
     // Fetch data from the API
     useEffect(() => {
@@ -38,21 +41,26 @@ const DataTable = () => {
         fetchEvents();
     }, []);
 
-    
-    // Handle DELETE request
-    const handleDelete = (id) => {
-        axios.delete(`https://api.example.com/data/${id}`)
-        .then(() => setData(data.filter(item => item.id !== id)))
-        .catch(error => console.error('Error deleting data:', error));
+    const handleEditClick = (id) => {
+        setSelectedEventId(id); // Establecer el ID seleccionado
+        setShowEdit(true); // Mostrar el modal de edición
     };
 
-    // Handle PUT request (example: updating description)
-    const handleEdit = (id, updatedDescription) => {
-        axios.put(`https://api.example.com/data/${id}`, { description: updatedDescription })
-        .then(response => {
-            setData(data.map(item => item.id === id ? response.data : item));
-        })
-        .catch(error => console.error('Error updating data:', error));
+    
+    // Handle DELETE request
+    const handleDelete = async (deleteId) => {
+        const token = localStorage.getItem('token');
+
+        try {
+            await axios.delete(`http://localhost:5000/api/eventos/eliminar/${deleteId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setData(data.filter((item) => item._id !== deleteId));
+        } catch (error) {
+            console.error('Error al eliminar el evento:', error);
+        }
     };
 
     const handleLogout = () => {
@@ -71,7 +79,7 @@ const DataTable = () => {
                         variant="success"
                         size="sm"
                         className="me-2"
-                        onClick={handleShow}
+                        onClick={() => setShowAdd(true)}
                     >
                         +
                     </Button>
@@ -130,8 +138,8 @@ const DataTable = () => {
                     <td>{item.ubicacion}</td>
                     <td>{item.descripcion}</td>
                     <td>
-                        <Button variant="danger" size="sm" onClick={() => handleDelete(item.id)}>–</Button>{' '}
-                        <Button variant="secondary" size="sm" onClick={() => handleEdit(item.id, 'Updated Description')}>
+                        <Button variant="danger" size="sm" onClick={() => handleDelete(item._id)}>–</Button>{' '}
+                        <Button variant="secondary" size="sm" onClick={() =>handleEditClick(item._id)}>
                         ✏️
                         </Button>
                     </td>
@@ -140,7 +148,8 @@ const DataTable = () => {
                 </tbody>
             </Table>
             </Card>
-            <ModalAddEvent show={show} handleClose={handleClose} />
+            <ModalAddEvent show={showAdd} handleClose={handleCloseAdd} />
+            <ModalEditEvent show={showEdit} handleClose={handleCloseEdit} id={selectedEventId} />
         </>
     );
 };
