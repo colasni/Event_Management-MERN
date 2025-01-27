@@ -3,6 +3,7 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import Login from './page/Login'
 import Signup from './page/Signup'
 import 'bootstrap/dist/css/bootstrap.min.css'
+//import 'bootstrap/dist/js/bootstrap.bundle.min'
 import EventManager from './page/EventManager'
 import ProtectedRoute from './ProtectedRoute';
 

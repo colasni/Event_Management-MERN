@@ -6,7 +6,7 @@ const esquema = new mongoose.Schema({
     descripcion: String,
     ubicacion: String,
     hora: String,
-    fecha: Date,
+    fecha: String,
 },{versionKey: false});
 
 const EventoModel = new mongoose.model('eventos', esquema);
