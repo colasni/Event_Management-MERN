@@ -29,11 +29,15 @@ const ModalAddEvent = ({ show, handleClose }) => {
         const token = localStorage.getItem('token'); // Obtener el token
 
         const apiUrl = "http://localhost:5000/api/eventos/crear"; // Reemplaza con tu URL de API
+
+        const formattedDate = `${formData.fecha.getFullYear()}/${(formData.fecha.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}/${formData.fecha.getDate().toString().padStart(2, "0")}`;
+
         const formattedData = {
             ...formData,
-            fecha: formData.fecha.toLocaleDateString(), // Convertir la fecha a string según el formato local (dd/MM/yyyy)
+            fecha: formattedDate, // Asignar la fecha en formato "yyyy/MM/dd"
         };
-
         try {
             const response = await fetch(apiUrl, {
                 method: "POST",
@@ -109,7 +113,7 @@ const ModalAddEvent = ({ show, handleClose }) => {
                         <DatePicker
                             selected={formData.fecha}
                             onChange={handleDateChange}
-                            dateFormat="dd/MM/yyyy"
+                            dateFormat="yyyy/MM/dd"
                             className="form-control"
                         />
                     </Form.Group>

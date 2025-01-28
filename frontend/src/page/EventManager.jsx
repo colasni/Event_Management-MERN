@@ -10,7 +10,7 @@ import ModalEditEvent from '../components/ModalEditEvent';
 const DataTable = () => {
     const [data, setData] = useState([]);
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const navigate = useNavigate();
+    const [showAll, setShowAll] = useState(false); // Nuevo estado para mostrar todos los datos
     const [selectedEventId, setSelectedEventId] = useState(null); // Nuevo estado para el ID seleccionado
 
     // Modal state
@@ -18,6 +18,8 @@ const DataTable = () => {
     const [showEdit, setShowEdit] = useState(false);
     const handleCloseAdd = () => setShowAdd(false);
     const handleCloseEdit = () => setShowEdit(false);
+
+    const navigate = useNavigate();
 
     // Fetch data from the API
     useEffect(() => {
@@ -67,6 +69,22 @@ const DataTable = () => {
         localStorage.removeItem('token'); // Eliminar el token de localStorage
         navigate('/');
     };
+
+    const handleShowAll = () => {
+        setShowAll(!showAll); // Cambiar el estado para mostrar todos los datos
+    };
+    
+    // Filtrar los datos por fecha
+    const filteredData = showAll
+    ? data // Si "Mostrar todos" está activo, muestra todos los datos
+    : data.filter((item) => {
+        // Convertimos selectedDate a "yyyy-MM-dd" sin zona horaria
+        const formattedSelectedDate = selectedDate.toISOString().split('T')[0];
+        // Aseguramos que la fecha del evento también sea "yyyy-MM-dd"
+        const eventDate = new Date(item.fecha).toISOString().split('T')[0];
+        return eventDate === formattedSelectedDate;
+    });
+    
     
 
     return (
@@ -94,17 +112,17 @@ const DataTable = () => {
             </div>
             <Row className="mb-3">
                 <Col md={2} className="d-flex flex-column">
-                <Form.Group controlId="dateFilter" className="mb-3">
-                    <Form.Label className="mb-1">Fecha</Form.Label>
-                    <div>
-                    <DatePicker
-                        selected={selectedDate}
-                        onChange={(date) => setSelectedDate(date)}
-                        className="form-control"
-                        dateFormat="yyyy/MM/dd"
-                    />
-                    </div>
-                </Form.Group>
+                    <Form.Group controlId="dateFilter" className="mb-3">
+                        <Form.Label className="mb-1">Fecha</Form.Label>
+                        <div>
+                        <DatePicker
+                            selected={selectedDate}
+                            onChange={(date) => setSelectedDate(date)}
+                            className="form-control"
+                            dateFormat="yyyy/MM/dd"
+                        />
+                        </div>
+                    </Form.Group>
                 </Col>
                 <Col md={4} className="d-flex flex-column">
                 <Form.Group controlId="locationFilter" className="mb-3">
@@ -116,6 +134,11 @@ const DataTable = () => {
                     <option value="Medellín">Medellín</option>
                     </Form.Select>
                 </Form.Group>
+                </Col>
+                <Col md={2}  className="d-flex flex-column mt-4">
+                        <Button  variant="primary" onClick={handleShowAll}>
+                            Mostrar todos los datos
+                        </Button>
                 </Col>
             </Row>
             <Table striped bordered hover variant="dark">
@@ -130,7 +153,7 @@ const DataTable = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {data.map((item) => (
+                {filteredData.map((item) => (
                     <tr key={item._id}>
                     <td>{item.nombre}</td>
                     <td>{item.fecha}</td>
