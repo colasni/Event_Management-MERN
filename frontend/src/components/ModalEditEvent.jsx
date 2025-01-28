@@ -28,9 +28,13 @@ const ModalEditEvent = ({ show, handleClose, id }) => {
 
         const apiUrl = `http://localhost:5000/api/eventos/actualizar/${id}`;
 
+        const formattedDate = `${formData.fecha.getFullYear()}/${(formData.fecha.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}/${formData.fecha.getDate().toString().padStart(2, "0")}`;
+
         const formattedData = {
             ...formData,
-            fecha: formData.fecha.toLocaleDateString(), // Convertir fecha a string (dd/MM/yyyy)
+            fecha: formattedDate, // Asignar la fecha en formato "yyyy/MM/dd"
         };
 
         try {
