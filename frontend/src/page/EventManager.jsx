@@ -157,7 +157,7 @@ const DataTable = () => {
                         <Button variant="primary" className="me-2" onClick={filterByDate}>Filtrar por fecha</Button>
                         <Button variant="secondary" className="me-2" onClick={filterByLocation}>Filtrar por ubicación</Button>
                         <Button variant="warning" className="me-2" onClick={filterByDateAndLocation}>Filtrar por fecha y ubicación</Button>
-                        <Button variant="info" onClick={handleShowAll}>Mostrar todos los datos</Button>
+                        <Button variant="info" onClick={handleShowAll}>Mostrar todos los eventos</Button>
                     </Col>
                 </Row>
                 {/* Tabla de eventos */}

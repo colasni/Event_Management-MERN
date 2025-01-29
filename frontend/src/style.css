@@ -13,3 +13,7 @@
         width: 65%;
     }
 }
+
+.custom-bg {
+    background-color: #1c1c1c; /* Cambia el color a tu preferencia */
+}

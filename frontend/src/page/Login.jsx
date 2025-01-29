@@ -42,6 +42,7 @@ function Login() {
             //setToken(response.data.token); // Ajusta según la estructura de la respuesta
             if (token) {
                 localStorage.setItem('token', token); // Guardar el token en localStorage
+                console.log('Token guardado:', token);
                 navigate('/eventManager'); 
             }
             } catch (err) {
@@ -52,7 +53,7 @@ function Login() {
     };
     
     return (
-        <div className='login template d-flex justify-content-center align-items-center w-100 vh-100 bg-primary'>
+        <div className='login template d-flex justify-content-center align-items-center w-100 vh-100 custom-bg'>
             <div className="form_container p-5 rounded bg-white">
                 <form onSubmit={handleSubmit}>
                     <h3 className='text-center'>Sign In</h3>
