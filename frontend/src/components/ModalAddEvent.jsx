@@ -3,7 +3,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const ModalAddEvent = ({ show, handleClose }) => {
+const ModalAddEvent = ({ show, handleClose, setData, setFilteredData}) => {
     const [formData, setFormData] = useState({
         nombre: "",
         descripcion: "",
@@ -52,6 +52,9 @@ const ModalAddEvent = ({ show, handleClose }) => {
             if (response.ok) {
                 const data = await response.json();
                 console.log("Evento guardado con éxito:", data);
+                // Guarda los datos en tiempo real sin necesidad de refrescar
+                setData(prevData => [...prevData, data.evento]);
+                setFilteredData(prevData => [...prevData, data.evento]);
                 handleClose();
             } else {
                 console.error("Error al guardar el evento:", response.statusText);

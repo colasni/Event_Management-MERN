@@ -17,7 +17,7 @@ export const crearEvento = async(req, res)=>{
         const {nombre, descripcion, ubicacion, hora, fecha} = req.body; //destructura el objeto req.body
         const newEvento = new EventoModel({nombre, descripcion, ubicacion, hora, fecha}); //crea un objeto evento
         await newEvento.save(); //guarda el evento en la base de datos
-        return res.status(200).json({status: true, message: 'Evento creado con éxito'}); //respuesta exitosa
+        return res.status(200).json({status: true, evento: newEvento}); //respuesta exitosa
     }catch(error){
         return res.status(500).json({status: false, message: [error.message]}); 
     }

@@ -190,7 +190,11 @@ const DataTable = () => {
                 </Table>
             </Card>
             {/* Modales */}
-            <ModalAddEvent show={showAdd} handleClose={handleCloseAdd} />
+            <ModalAddEvent 
+            show={showAdd} 
+            handleClose={handleCloseAdd} 
+            setData={setData} 
+            setFilteredData={setFilteredData}  />
             <ModalEditEvent show={showEdit} handleClose={handleCloseEdit} id={selectedEventId} />
         </>
     );
