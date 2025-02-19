@@ -5,6 +5,9 @@
 
 ![Image](https://github.com/user-attachments/assets/79e352f1-c609-4d76-ad3e-9510632ebe7f)
 
+Puedes echarle un vistazo:
+https://gestor-de-evento-front.vercel.app/
+
 Video en el cual explicó su funcionamiento:
 https://youtu.be/WFeoO6tzJL8?si=ZT95m9JeDR1PhQmg
 
